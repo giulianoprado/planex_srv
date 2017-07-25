@@ -1,19 +1,16 @@
-package edu.usp.planex.model;
+package edu.usp.planex.cambios;
 
 import edu.usp.planex.support.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 
-import java.net.ProtocolException;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Locale;
 
 /**
  * Created by giulianoprado on 27/06/17.
  */
 
-public class CambioCotacao implements Cambio {
+public class CambioTurismo implements Cambio {
 
     @Autowired
     Utils utils;
@@ -28,10 +25,10 @@ public class CambioCotacao implements Cambio {
     @Override
     public boolean atualizaCambio() {
         try {
-            String html = utils.getHTML("https://www.cotacao.com.br/produtos/cartoes-de-viagem-rendimento/rendimento-visa-travelmoney.html");
-            int posValue = html.indexOf("R$",html.indexOf("<i class=\"flag USD\"></i>Dólar Americano</td>"));
-            String val = html.substring(posValue+2, posValue+7);
-            NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+            String html = utils.getHTML("https://cotacoes.economia.uol.com.br/cambioJSONChart.html?callback=grafico.parseData&type=range&cod=BRLT&mt=off");
+            int posValue = html.indexOf("\"ask\":",html.indexOf("{\"high\"")-33);
+            String val = html.substring(posValue+6, posValue+12);
+            NumberFormat format = NumberFormat.getInstance(Locale.US);
             taxa = format.parse(val).doubleValue();
         } catch (Exception e) {
             return false;
