@@ -1,4 +1,4 @@
-package edu.usp.planex.model;
+package edu.usp.planex.cambios;
 
 /**
  * Created by giulianoprado on 27/06/17.

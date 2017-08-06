@@ -1,4 +1,4 @@
-package edu.usp.planex.model;
+package edu.usp.planex.cambios;
 
 import edu.usp.planex.support.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import java.util.Locale;
  * Created by giulianoprado on 27/06/17.
  */
 
-public class CambioTurismo implements Cambio {
+public class CambioConfidence implements Cambio {
 
     @Autowired
     Utils utils;
@@ -25,10 +25,10 @@ public class CambioTurismo implements Cambio {
     @Override
     public boolean atualizaCambio() {
         try {
-            String html = utils.getHTML("https://cotacoes.economia.uol.com.br/cambioJSONChart.html?callback=grafico.parseData&type=range&cod=BRLT&mt=off");
-            int posValue = html.indexOf("\"ask\":",html.indexOf("{\"high\"")-33);
-            String val = html.substring(posValue+6, posValue+12);
-            NumberFormat format = NumberFormat.getInstance(Locale.US);
+            String html = utils.getHTML("https://www.confidencecambio.com.br/ecommerce/#/home");
+            int posValue = html.indexOf("R$",html.indexOf("ESPÉCIE"));
+            String val = html.substring(posValue+2, posValue+7);
+            NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
             taxa = format.parse(val).doubleValue();
         } catch (Exception e) {
             return false;

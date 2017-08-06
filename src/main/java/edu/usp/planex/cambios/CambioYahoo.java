@@ -1,9 +1,7 @@
-package edu.usp.planex.model;
+package edu.usp.planex.cambios;
 
-import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.quotes.fx.FxQuote;
-import yahoofinance.quotes.fx.FxSymbols;
 
 import java.io.IOException;
 
