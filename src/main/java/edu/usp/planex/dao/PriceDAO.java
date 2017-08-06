@@ -10,14 +10,12 @@ import edu.usp.planex.model.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.sql.DataSource;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class PriceDAO {
 
@@ -27,7 +25,6 @@ public class PriceDAO {
     @Autowired
     private DataSource dataSource;
 
-    @RequestMapping("/test")
     public List<Provider> getProviderList() {
         try (Connection connection = getConnection()) {
             List<Provider> providerList = new ArrayList<Provider>();
@@ -42,6 +39,16 @@ public class PriceDAO {
                 providerList.add(provider);
             }
             return providerList;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addPrice (double value, String provider) {
+        try (Connection connection = getConnection()) {
+            List<Provider> providerList = new ArrayList<Provider>();
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("INSERT INTO Price (provider, value, time) VALUES ((SELECT id FROM Provider WHERE shortname='" + provider + "'), '" + value + "', now())");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

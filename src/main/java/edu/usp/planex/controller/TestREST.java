@@ -13,19 +13,24 @@ import edu.usp.planex.model.Provider;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RequestMapping ("/api")
+
+
 @RestController
 public class TestREST
 {
-    @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+
+    //@Autowired
+    //PriceDAO priceDAO;
+
+    @RequestMapping(value = "/api", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<String> test() {
         List<Provider> test = new PriceDAO().getProviderList();
-
 
 
         List<Cambio> cambios = new ArrayList<>();
@@ -41,6 +46,12 @@ public class TestREST
             list.add(s);
         }
         return list;
+    }
+
+    @RequestMapping(value = "/addValue", method = RequestMethod.GET)
+    public String addValue(@RequestParam(value = "value") double value, @RequestParam(value = "provider") String provider) {
+        new PriceDAO().addPrice(value, provider);
+        return "ok";
     }
 
 
