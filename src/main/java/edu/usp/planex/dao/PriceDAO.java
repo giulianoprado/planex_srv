@@ -6,6 +6,7 @@ package edu.usp.planex.dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import edu.usp.planex.model.Price;
 import edu.usp.planex.model.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,9 @@ public class PriceDAO {
 
     @Value("${planex.datasource.url}")
     private String dbUrl;
+
+    @Value("${planex.dataDAO.lastTradeListLimit}")
+    private int lastTradeListLimit = 10;
 
     @Autowired
     private DataSource dataSource;
@@ -49,6 +53,53 @@ public class PriceDAO {
             List<Provider> providerList = new ArrayList<Provider>();
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("INSERT INTO Price (provider, value, time) VALUES ((SELECT id FROM Provider WHERE shortname='" + provider + "'), '" + value + "', now())");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Price> getPricesByProvider(String provider, String date) {
+        try (Connection connection = getConnection()) {
+            List<Price> priceList = new ArrayList<Price>();
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT price.id priceid, provider.id providerid, provider, value, date, shortname, fullname, type FROM Price JOIN Provider ON Price.provider=Provider.id WHERE Date='" + date + "' AND Provider.shortname = '" + provider + "'");
+            while(rs.next()){
+                Price price = new Price();
+                price.setProvider(new Provider());
+                price.getProvider().setId(rs.getInt("providerid"));
+                price.getProvider().setFullName(rs.getString("fullname"));
+                price.getProvider().setShortName(rs.getString("shortname"));
+                price.getProvider().setTypeId(rs.getInt("type"));
+                price.setDate(rs.getDate("date"));
+                price.setValue(rs.getDouble("value"));
+                price.setId(rs.getInt("priceid"));
+                priceList.add(price);
+            }
+            return priceList;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Price> getLastPricesByProvider(String provider) {
+        try (Connection connection = getConnection()) {
+            List<Price> priceList = new ArrayList<Price>();
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT price.id priceid, provider.id providerid, provider, value, date, shortname, fullname, type FROM Price JOIN Provider ON Price.provider=Provider.id WHERE Provider.shortname = '" + provider + "' ORDER BY date DESC");
+            int remainingElements = lastTradeListLimit;
+            while(rs.next() && remainingElements-->0){
+                Price price = new Price();
+                price.setProvider(new Provider());
+                price.getProvider().setId(rs.getInt("providerid"));
+                price.getProvider().setFullName(rs.getString("fullname"));
+                price.getProvider().setShortName(rs.getString("shortname"));
+                price.getProvider().setTypeId(rs.getInt("type"));
+                price.setDate(rs.getDate("date"));
+                price.setValue(rs.getDouble("value"));
+                price.setId(rs.getInt("priceid"));
+                priceList.add(price);
+            }
+            return priceList;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
