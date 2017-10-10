@@ -1,47 +1,34 @@
 package edu.usp.planex.cambios;
 
+import edu.usp.planex.support.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 import yahoofinance.YahooFinance;
 import yahoofinance.quotes.fx.FxQuote;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Created by giulianoprado on 27/06/17.
  */
 public class CambioYahoo implements Cambio{
 
-    double taxa;
+    @Autowired
+    private Utils utils;
 
     @Override
-    public double calcularCotacao(double valor) {
-        return 0;
-    }
-
-    @Override
-    public boolean atualizaCambio() {
+    public double calcularCotacao() {
         try {
             FxQuote usdbrl = YahooFinance.getFx("USDBRL=X");
-            taxa = usdbrl.getPrice().doubleValue();
-        } catch (IOException e) {
-            return false;
+            return usdbrl.getPrice().doubleValue();
+        } catch (Exception e) {
+            return -1;
         }
-        return true;
     }
 
     @Override
-    public void setTaxa(double taxa) {
-
-    }
-
-    @Override
-    public double getTaxa() {
-        return 0;
-    }
-
-    @Override
-    public String toString() {
-        return "CambioYahoo{" +
-                "taxa=" + taxa +
-                '}';
+    public int getProviderId() {
+        return 3;
     }
 }

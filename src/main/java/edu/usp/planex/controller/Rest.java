@@ -4,6 +4,7 @@ package edu.usp.planex.controller;
  * Created by giulianoprado on 27/06/17.
  */
 
+import edu.usp.planex.business.CambioMedia;
 import edu.usp.planex.business.CambioService;
 import edu.usp.planex.cambios.Cambio;
 import edu.usp.planex.cambios.CambioCotacao;
@@ -13,28 +14,30 @@ import edu.usp.planex.dao.BacenDAO;
 import edu.usp.planex.dao.PriceDAO;
 import edu.usp.planex.model.Price;
 import edu.usp.planex.model.Provider;
+import edu.usp.planex.model.Quote;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 
 
 @RestController
-public class TestREST
+public class Rest
 {
 
-    //@Autowired
-    //PriceDAO priceDAO;
+    @Autowired
+    PriceDAO priceDAO;
 
+    @Autowired
+    CambioService cambioService;
 
     @RequestMapping(value = "/api", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<String> test() {
-        double aaaa = new CambioService().calculateQuote("NUBANK","2017-08-08");
         new BacenDAO().getQuote("2017-08-06");
         List<Provider> test = new PriceDAO().getProviderList();
 
@@ -44,7 +47,7 @@ public class TestREST
         cambios.add(new CambioYahoo());
         cambios.add(new CambioCotacao());
         for (Cambio cambio : cambios) {
-            cambio.atualizaCambio();
+            //cambio.atualizaCambio();
         }
         List<String> list = new ArrayList<>();
         for (Cambio cambio : cambios) {
@@ -54,15 +57,23 @@ public class TestREST
         return list;
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/addValue", method = RequestMethod.GET)
-    public String addValue(@RequestParam(value = "value") double value, @RequestParam(value = "provider") String provider) {
-        new PriceDAO().addPrice(value, provider);
+    public String addValue(@RequestParam(value = "value") double value, @RequestParam(value = "provider") String provider, @RequestParam(value = "date") String date) {
+        priceDAO.addPrice(value, provider, date);
         return "ok";
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/getQuote", method = RequestMethod.GET)
-    public double getQuote(@RequestParam(value = "date") String date, @RequestParam(value = "provider") String provider) {
-        return new CambioService().calculateQuote(provider, date);
+    public Quote getQuote(@RequestParam(value = "date") String date, @RequestParam(value = "provider") String provider) {
+        return cambioService.calculateQuote(provider, date);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/getProviders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Provider> getProviders() {
+        return priceDAO.getProviderList();
     }
 
 

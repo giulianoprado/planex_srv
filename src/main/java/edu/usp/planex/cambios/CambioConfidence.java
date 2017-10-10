@@ -13,44 +13,25 @@ import java.util.Locale;
 public class CambioConfidence implements Cambio {
 
     @Autowired
-    Utils utils;
+    private Utils utils;
 
-    double taxa;
-
-    @Override
-    public double calcularCotacao(double valor) {
-        return valor * taxa;
-    }
+    private double IOF = 1.011;
 
     @Override
-    public boolean atualizaCambio() {
+    public double calcularCotacao() {
         try {
-            String html = utils.getHTML("https://www.confidencecambio.com.br/ecommerce/#/home");
-            int posValue = html.indexOf("R$",html.indexOf("ESPÉCIE"));
-            String val = html.substring(posValue+2, posValue+7);
-            NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-            taxa = format.parse(val).doubleValue();
+            String html = utils.getHTML("https://www2.confidencecambio.com.br/api/v1/resumo-cotacao");
+            int posValue = html.indexOf("\"cotacao\"", html.indexOf("ESPÉCIE"));
+            String val = html.substring(posValue + 10, posValue + 16);
+            NumberFormat format = NumberFormat.getInstance(Locale.US);
+            return format.parse(val).doubleValue() * IOF; //somar com IOF
         } catch (Exception e) {
-            return false;
+            return -1;
         }
-        return true;
     }
 
     @Override
-    public void setTaxa(double taxa) {
-        this.taxa = taxa;
-    }
-
-    @Override
-    public double getTaxa() {
-        return taxa;
-    }
-
-    @Override
-    public String toString() {
-        return "CambioCotacao{" +
-                "utils=" + utils +
-                ", taxa=" + taxa +
-                '}';
+    public int getProviderId() {
+        return 3;
     }
 }

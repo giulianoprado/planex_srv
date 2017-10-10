@@ -13,44 +13,23 @@ import java.util.Locale;
 public class CambioTurismo implements Cambio {
 
     @Autowired
-    Utils utils;
-
-    double taxa;
+    private Utils utils;
 
     @Override
-    public double calcularCotacao(double valor) {
-        return valor * taxa;
-    }
-
-    @Override
-    public boolean atualizaCambio() {
+    public double calcularCotacao() {
         try {
             String html = utils.getHTML("https://cotacoes.economia.uol.com.br/cambioJSONChart.html?callback=grafico.parseData&type=range&cod=BRLT&mt=off");
             int posValue = html.indexOf("\"ask\":",html.indexOf("{\"high\"")-33);
             String val = html.substring(posValue+6, posValue+12);
             NumberFormat format = NumberFormat.getInstance(Locale.US);
-            taxa = format.parse(val).doubleValue();
+            return format.parse(val).doubleValue();
         } catch (Exception e) {
-            return false;
+            return -1;
         }
-        return true;
     }
 
     @Override
-    public void setTaxa(double taxa) {
-        this.taxa = taxa;
-    }
-
-    @Override
-    public double getTaxa() {
-        return taxa;
-    }
-
-    @Override
-    public String toString() {
-        return "CambioCotacao{" +
-                "utils=" + utils +
-                ", taxa=" + taxa +
-                '}';
+    public int getProviderId() {
+        return 3;
     }
 }

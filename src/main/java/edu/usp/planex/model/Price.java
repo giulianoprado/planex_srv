@@ -6,17 +6,18 @@ import java.sql.Date;
  * Created by giulianoprado on 06/08/17.
  */
 public class Price {
-    int id;
-    Provider provider;
-    double value;
-    Date date;
+    private Provider provider;
+    private double value;
+    private Date date;
+    private int count;
+    private int priceDistance;
 
-    public int getId() {
-        return id;
+    public int getPriceDistance() {
+        return priceDistance;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPriceDistance(int priceDistance) {
+        this.priceDistance = priceDistance;
     }
 
     public Provider getProvider() {
@@ -41,5 +42,13 @@ public class Price {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
