@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Planex - A cotação nas suas mãos</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-select.css">
+
+    <!-- Custom fonts for this template -->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="device-mockups/device-mockups.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/new-age.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Planex</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#sobre">Sobre</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#buscar">Consultar</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#contribuir">Contribuir</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#graficos">Gráfico</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#recursos">Recursos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#contato">Contato</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="masthead">
+      <div class="container h-100">
+        <div class="row h-100">
+          <div class="col-lg-7 my-auto">
+            <div class="header-content mx-auto">
+              <h1 class="mb-5">Planex é um serviço colaborativo que permite estimar as cotações dos diversos cartões! </h1>
+              <a href="#cotacoes" class="btn btn-outline btn-xl js-scroll-trigger">Utilize já!</a>
+            </div>
+          </div>
+          <div class="col-lg-5 my-auto">
+            <div class="device-container">
+              <div class="device-mockup iphone6_plus portrait white">
+                <div class="device">
+                  <div class="screen">
+                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                    <img src="img/demo-screen-1.png" class="img-fluid" alt="" height="621" width="1104">
+                  </div>
+                  <div class="button">
+                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="download bg-primary text-center" id="sobre">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <h2 class="section-heading">Compre mais, pague menos!</h2>
+            <p>Com o Planex, você pode economizar com tarifas bancárias e economizar! O Planex, através de uma plataforma colaborativa, permite que você conheça o preço cobrado por cada banco e escolha o mais adequado!</p>
+            <div class="badges">
+              <!--<a class="badge-link" href="#"><img src="img/google-play-badge.svg" alt=""></a>-->
+              <!--<a class="badge-link" href="#"><img src="img/app-store-badge.svg" alt=""></a>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="buscar" id="buscar">
+      <div class="container">
+        <div class="buscar-content text-center" >
+          <h2>Consulte as cotações</h2>
+          <p>Escolha seu banco de preferência e veja a cotação cobrada por ele!</p>
+          <hr>
+          <br><br>
+        </div>
+        <div class="buscar-form text-center" name="searchQuote" style="display:none;">
+          <form action="localhost:8080/addValue" method="get" >
+            <p>Selecione o banco desejado: </p>
+            <select name="searchQuote-banks" id="searchQuote-banks"></select>
+
+            <p>Selecione a data da cotação: </p>
+            <input type="date" name="searchQuote-date" id="searchQuote-date"><br><br>
+            <input id="searchQuote-search" type="button" value="Buscar cotação" onclick="buscarCotacao();" />
+
+
+          </form>
+        </div>
+
+        <div class="buscar-form text-center" name="searchQuoteLoading">
+          <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+          <span class="sr-only">Loading...</span>
+          <p id="searchQuoteLoading-label">Aguarde<br>O sistema está sendo inicializado...</p>
+        </div>
+        <div class="buscar-result text-center" name="searchQuoteResult" style="display:none;">
+          <p id="searchQuote-date-label"></p><p id="searchQuote-bank-label"></p>
+          <h1 id="searchQuote-quote-label"><span style="font-size:30px;">R$</span>3,12</h1>
+          <p>Spread: <span id="searchQuote-spread-label"></span> - Ptax: <span id="searchQuote-ptax-label"></span></p>
+          <br><input id="search" type="button" value="Nova consulta" onclick="retornarParaBusca();" />
+        </div>
+        <div class="buscar-result text-center" name="searchQuoteResultError" style="display:none;">
+          <h1>Erro</h1>
+          <p>Infelizmente, houve um problema com a sua busca.<br>Tente novamente mais tarde.</p>
+          <br><input id="search" type="button" value="Nova consulta" onclick="retornarParaBusca();" />
+        </div>
+        <div class="buscar-result text-center" name="searchQuoteResultErrorLoad" style="display:none;">
+          <h1>Erro</h1>
+          <p>Ocorreu um erro na conexão com o servidor.<br>Por favor, tente novamente mais tarde ou clique no botão abaixo para tentar novamente.</p>
+          <br><input id="reload" type="button" value="Tentar novamente" onclick="loadBanks();" />
+        </div>
+
+      </div>
+    </section>
+
+    <section class="contribuir" id="contribuir">
+      <div class="container">
+        <div class="contribuir-content text-center" >
+          <h2>Contribua com o projeto</h2>
+          <p>Você sabe a cotação que o banco cobra de você? Nos auxilie a melhorar a vida de mais pessoas!</p>
+          <hr>
+          <br><br>
+        </div>
+        <div class="contribuir-form text-center" name="addValue" style="display:none;">
+          <form action="localhost:8080/addValue" method="get" >
+            <p>Selecione o banco desejado: </p>
+            <select name="addValue-banks" id="addValue-banks"></select>
+
+            <p>Selecione a data da cotação: </p>
+            <input type="date" name="addValue-date" id="addValue-date"><br>
+
+            <p>Selecione o valor que você pagou pela moeda, já com IOF e demais encargos: </p>
+            <input type="number" name="addValue-value" id="addValue-value"><br><br>
+            <input id="addValue-value" type="button" value="Adicionar cotação" onclick="adicionarValor();" />
+
+
+          </form>
+        </div>
+
+        <div class="contribuir-form text-center" name="addValueLoading">
+          <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+          <span class="sr-only">Loading...</span>
+          <p id="addValueLoading-lobel">Aguarde<br>O sistema está sendo inicializado...</p>
+        </div>
+        <div class="contribuir-result text-center" name="addValueResult" style="display:none;">
+          <h1>Obrigado</h1>
+          <p>Sua cotação foi adicionada com sucesso</p>
+          <br><input id="back" type="button" value="Nova contribuicao" onclick="retornarParaContribuir();" />
+        </div>
+        <div class="contribuir-result text-center" name="addValueResultError" style="display:none;">
+          <h1>Erro</h1>
+          <p>Infelizmente, houve um problema com a sua contribuição.<br>Tente novamente mais tarde.</p>
+          <br><input id="back" type="button" value="Nova contribuicao" onclick="retornarParaContribuir();" />
+        </div>
+        <div class="contribuir-result text-center" name="addValueResultErrorLoad" style="display:none;">
+          <h1>Erro</h1>
+          <p>Ocorreu um erro na conexão com o servidor.<br>Por favor, tente novamente mais tarde ou clique no botão abaixo para tentar novamente.</p>
+          <br><input id="reload" type="button" value="Tentar novamente" onclick="loadBanks();" />
+        </div>
+
+      </div>
+    </section>
+
+    <section class="graficos" id="graficos">
+      <div class="container">
+        <div class="graficos-content text-center" >
+          <h2>Gráfico de cotações</h2>
+          <p>Veja o gráfico histórico estimado das cotações para todos os bancos disponíveis!</p>
+          <hr>
+          <br><br>
+
+        </div>
+        <div class="graficos-form text-center" name="graficoLoading">
+          <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+          <span class="sr-only">Loading...</span>
+          <p id="searchQuoteLoading-label">Aguarde<br>Estamos gerando o gráfico de cotações...</p>
+        </div>
+        <div class="graficos-resykt text-center" name="graficoResultError" style="display:none;">
+          <h1>Erro</h1>
+          <p>Infelizmente, houve um problema com a sua busca.<br>Tente novamente mais tarde.</p>
+          <br><input id="search" type="button" value="Nova consulta" onclick="buscarCotacaoGrafico();" />
+        </div>
+        <div class="graficos-form text-center" name="graficoContainer" style="display:none;">
+
+          <canvas id="graficoElem" style="height: 400px; width: 100%;"/>
+            <p>Para desativar ou reativar uma cotação, clique no nome do provedor, disponível na legenda do gráfico</p><br>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="recursos">
+      <div class="container">
+        <div class="section-heading text-center">
+          <h2>Recursos</h2>
+          <p class="text-muted">Você sabe quais recursos o Planex disponibiliza para você?</p>
+          <hr>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 my-auto">
+            <div class="device-container">
+              <div class="device-mockup iphone6_plus portrait white">
+                <div class="device">
+                  <div class="screen">
+                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                    <img src="img/demo-screen-1.png" class="img-fluid" alt="" height="621" width="1104">
+                  </div>
+                  <div class="button">
+                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 my-auto">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="icon-screen-smartphone text-primary"></i>
+                    <h3>Multiplataformas</h3>
+                    <p class="text-muted">O Planex é compatível com computadores e com os principais dispositivos móveis</p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="icon-calculator text-primary"></i>
+                    <h3>Sem contas</h3>
+                    <p class="text-muted">Você não precisa somar IOF ou impostos! O Planex já calcula para você o valor final!</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="icon-present text-primary"></i>
+                    <h3>Grátis</h3>
+                    <p class="text-muted">Utilize gratuitamente e ganhe dinheiro, economizando nas suas compras de câmbio!  </p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="icon-lock-open text-primary"></i>
+                    <h3>Open Source</h3>
+                    <p class="text-muted">O projeto está disponível OpenSource com licença MIT!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contribuir">
+      <div class="cta-content">
+        <div class="container">
+          <h2>Pague menos.<br>Leve mais.</h2>
+          <a href="#buscar" class="btn btn-outline btn-xl js-scroll-trigger">Começar a usar!</a>
+        </div>
+      </div>
+      <div class="overlay"></div>
+    </section>
+
+    <section class="contact bg-primary" id="contato">
+      <div class="container">
+        <h2>Nós
+          <i class="fa fa-heart"></i>
+          programar!</h2>
+        <ul class="list-inline list-social">
+          <li class="list-inline-item social-facebook">
+            <a href="facebook.com/giulianobprado">
+              <i class="fa fa-facebook"></i>
+              <p>Giuliano Prado</p>
+            </a>
+          </li>
+          <li class="list-inline-item social-facebook">
+            <a href="facebook.com/gabrielafmendes">
+              <i class="fa fa-facebook"></i>
+              <p>Gabriela Fusco</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2017 Planex. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/chartjs/Chart.bundle.min.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/getquote.js"></script>
+    <script src="js/addvalue.js"></script>
+    <script src="js/createChart.js"></script>
+    <script src="js/planex-base.js"></script>
+    <script src="js/bootstrap-select.js"></script>
+
+
+
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/new-age.min.js"></script>
+
+  </body>
+
+</html>

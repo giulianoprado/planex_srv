@@ -10,6 +10,15 @@ public class Quote {
     double quote;
     double spread;
     double ptax;
+    String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public double getQuote() {
         return quote;

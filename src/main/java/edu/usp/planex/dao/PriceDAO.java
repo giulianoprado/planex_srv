@@ -17,7 +17,11 @@ import javax.sql.DataSource;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class PriceDAO {
@@ -27,6 +31,10 @@ public class PriceDAO {
 
     @Value("${planex.dataDAO.lastTradeListLimit}")
     private int lastTradeListLimit = 10;
+
+    private static Map<String, String> cacheProviders = new HashMap<String, String>();
+
+    private final static Logger LOGGER = Logger.getLogger(PriceDAO.class.getName());
 
     public List<Provider> getProviderList() {
         try (Connection connection = getConnection()) {
@@ -42,6 +50,25 @@ public class PriceDAO {
                 providerList.add(provider);
             }
             return providerList;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getProviderName(String id) {
+        if (cacheProviders.get(id) != null) {
+            LOGGER.log(Level.INFO, "Provider received from cache: id=" + id + ", name=" + cacheProviders.get(id));
+            return cacheProviders.get(id);
+        }
+        try (Connection connection = getConnection()) {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT fullname FROM Provider WHERE id = " + id);
+            while(rs.next()){
+                LOGGER.log(Level.INFO, "Provider received from cache: id=" + id + ", name=" + rs.getString("fullname"));
+                cacheProviders.put(id, rs.getString("fullname"));
+                return rs.getString("fullname");
+            }
+            return null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

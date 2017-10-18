@@ -4,12 +4,18 @@ import edu.usp.planex.dao.BacenDAO;
 import edu.usp.planex.dao.PriceDAO;
 import edu.usp.planex.model.Price;
 import edu.usp.planex.model.Quote;
+import edu.usp.planex.model.QuoteList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by giulianoprado on 06/08/17.
@@ -39,7 +45,28 @@ public class CambioMediaPorDistancia implements CambioService {
         quote.setPtax(bacenDAO.getQuote(date));
         quote.setSpread(average);
         quote.setQuote(quote.getPtax() * quote.getSpread());
+        quote.setDate(date);
         return quote;
+    }
+
+    @Override
+    public List<QuoteList> getQuoteList(List<String> providerId, String date) {
+        return providerId.parallelStream().map(provider -> {
+            try {
+                List<Quote> listQuote = new ArrayList<Quote>();
+                SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd");
+                Date end = in.parse(date);
+                Calendar cEnd = Calendar.getInstance(); cEnd.setTime(end);
+                for (int i=0;i<15;i++) {
+                    cEnd.add(Calendar.DAY_OF_MONTH, -1);
+                    listQuote.add(calculateQuote(provider, in.format(cEnd.getTime())));
+                }
+                return new QuoteList(provider, priceDAO.getProviderName(provider), listQuote);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
+
     }
 
 

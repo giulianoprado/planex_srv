@@ -24,4 +24,5 @@ INSERT INTO Provider_Type(name) VALUES ('Gestora de cartao');
 INSERT INTO Provider(shortname, fullname, type) VALUES ('BB', 'Banco do Brasil S.A.', '1');
 INSERT INTO Provider(shortname, fullname, type) VALUES ('ITAU', 'Itau Unibanco S.A.', '1');
 INSERT INTO Provider(shortname, fullname, type) VALUES ('CONFIDENCE', 'Confidence Corretora de Cambio S.A.', '2');
+INSERT INTO Provider(shortname, fullname, type) VALUES ('COTACAO', 'Cotação DTVM S.A.', '2');
 INSERT INTO Provider(shortname, fullname, type) VALUES ('NUBANK', 'Nu Pagamentos S.A.', '3');

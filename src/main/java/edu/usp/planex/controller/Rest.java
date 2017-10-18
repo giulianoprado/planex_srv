@@ -15,6 +15,7 @@ import edu.usp.planex.dao.PriceDAO;
 import edu.usp.planex.model.Price;
 import edu.usp.planex.model.Provider;
 import edu.usp.planex.model.Quote;
+import edu.usp.planex.model.QuoteList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -76,5 +77,10 @@ public class Rest
         return priceDAO.getProviderList();
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/getQuoteList", method = RequestMethod.GET)
+    public List<QuoteList> getQuoteList (@RequestParam(value = "date") String date, @RequestParam(value = "provider") List<String> provider) {
+        return cambioService.getQuoteList(provider, date);
+    }
 
 }
