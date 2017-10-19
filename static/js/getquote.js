@@ -1,5 +1,3 @@
-var host = "http://localhost:8080";
-
 var result;
 function retornarParaBusca(){
   document.getElementsByName('searchQuote')[0].style.display="block"

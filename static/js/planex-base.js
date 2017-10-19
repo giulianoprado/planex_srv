@@ -1,3 +1,4 @@
+var host = "/";
 function getBanks(json){
   var selectSearch = document.getElementsByName('searchQuote-banks')[0];
   var selectAdd = document.getElementsByName('addValue-banks')[0];

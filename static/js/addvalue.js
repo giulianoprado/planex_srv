@@ -1,5 +1,3 @@
-var host = "http://localhost:8080";
-
 function retornarParaContribuir(){
   document.getElementsByName('addValue')[0].style.display="block"
   document.getElementsByName('addValueLoading')[0].style.display="none"
