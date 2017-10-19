@@ -1,4 +1,5 @@
 var result;
+var host = "http://planex.herokuapp.com/";
 function retornarParaBusca(){
   document.getElementsByName('searchQuote')[0].style.display="block"
   document.getElementsByName('searchQuoteLoading')[0].style.display="none"

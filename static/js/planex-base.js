@@ -1,4 +1,4 @@
-var host = "/";
+var host = "http://planex.herokuapp.com/";
 function getBanks(json){
   var selectSearch = document.getElementsByName('searchQuote-banks')[0];
   var selectAdd = document.getElementsByName('addValue-banks')[0];

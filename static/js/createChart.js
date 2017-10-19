@@ -1,3 +1,4 @@
+var host = "http://planex.herokuapp.com/";
 var ctx = document.getElementById("graficoElem").getContext('2d');
 function today() {
   var date = new Date();
